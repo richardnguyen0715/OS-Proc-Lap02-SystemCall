@@ -42,5 +42,7 @@ void *memcpy(void *, const void *, uint);
 void* malloc(uint);
 void free(void*);
 
+int trace(int mask);
+
 struct sysinfo;
 int sysinfo(struct sysinfo *);
