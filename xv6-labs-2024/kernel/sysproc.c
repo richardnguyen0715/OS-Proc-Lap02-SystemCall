@@ -94,6 +94,21 @@ sys_uptime(void)
 }
 
 uint64
+sys_trace(void)
+{
+  int mask;
+
+  // Lấy tham số từ user space
+  argint(0, &mask);
+
+  // Lưu giá trị mask vào biến trace_mask của tiến trình hiện tại
+  struct proc *p = myproc();
+  p->trace_mask = mask;
+
+  return 0; // Trả về thành công
+}
+
+uint64
 sys_sysinfo(void)
 {
   uint64 addr;
