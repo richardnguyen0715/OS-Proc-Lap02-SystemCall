@@ -1,0 +1,16 @@
+1. Looking at the backtrace output, which function called syscall?
+Syscall được gọi bởi usertrap(), được thể hiện trong output của backtrace.
+2. What is the value of p->trapframe->a7 and what does that value represent? 
+- Giá trị của p->trapframe->a7 bằng 7
+- Số 7 đại dại cho SYS_exec.
+3. What was the previous mode that the CPU was in?
+chế độ người dùng user mode.
+4. Write down the assembly instruction the kernel is panicing at. Which register corresponds to the variable num?
+- Câu lệnh lỗi : lw s2,0(zero)
+- Thanh ghi tương ứng với num là : s2
+5. Why does the kernel crash? 
+Một lỗi đã xảy ra trong khi tải dữ liệu từ địa chỉ bộ nhớ 0 vào thanh ghi s2, nhưng trong sách giáo trình, địa chỉ 0 không ánh xạ vào không gian kernel, thay vào đó, nó bắt đầu tại địa chỉ ảo 0x80000000
+6. What is the name of the binary that was running when the kernel paniced? What is its process id (pid)?
+- Tên của tệp nhị phân: "initcode\000\000\000\000\000\000\000"
+- pid = 1
+//PHẦN GIẢI THÍCH CHI TIẾT CHO TỪNG CÂU HỎI ĐƯỢC THỰC HIỆN TRONG FILE BÁO CÁO
