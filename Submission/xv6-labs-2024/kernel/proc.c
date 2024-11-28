@@ -17,6 +17,8 @@ struct spinlock pid_lock;
 
 extern void forkret(void);
 static void freeproc(struct proc *p);
+void update_runnable_procs(void);
+uint64 loadavg = 0;
 
 extern char trampoline[]; // trampoline.S
 
@@ -401,6 +403,7 @@ wait(uint64 addr)
   acquire(&wait_lock);
 
   for(;;){
+
     // Scan through table looking for exited children.
     havekids = 0;
     for(pp = proc; pp < &proc[NPROC]; pp++){
@@ -453,6 +456,7 @@ scheduler(void)
 
   c->proc = 0;
   for(;;){
+    update_runnable_procs();
     // The most recent process to run may have had interrupts
     // turned off; enable them to avoid a deadlock if all
     // processes are waiting.
@@ -708,4 +712,19 @@ nproc(void){
     }
   }
   return procCount;
+}
+
+uint64 runnable_procs = 0;
+
+
+void update_runnable_procs(void) {
+    struct proc *p;
+    uint count = 0;
+
+    for (p = proc; p < &proc[NPROC]; p++) {
+        if (p->state == RUNNABLE)
+            count++;
+    }
+    runnable_procs = count;
+    loadavg = (loadavg * 5 + runnable_procs * 10) / 10;
 }

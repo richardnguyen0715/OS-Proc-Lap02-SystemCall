@@ -1,44 +1,350 @@
 diff --git a/Report/22120384_22120398_22120412.docx b/Report/22120384_22120398_22120412.docx
-index c54c62d..9e0e4f8 100644
+index c83fa7e..f3e3606 100644
 --- a/Report/22120384_22120398_22120412.docx
 +++ b/Report/22120384_22120398_22120412.docx
-@@ -32,6 +32,18 @@ Thông tin chung:
-  22120412  -  Nguyễn Anh Tường.
-  Link github repository: "Click here to go to our github repository." [HYPERLINK: https://github.com/richardnguyen0715/OS-Proc-Lap02-SystemCall]
+@@ -41,7 +41,11 @@ I.	Cách sử dụng GDB để debug:	8
+ II.	Giải thích cách thức hoạt động và trả lời các câu hỏi:	8
+ III.	Trả lời câu hỏi và giải thích	9
+ Câu 2: Tracing.	14
++II.	Phần cài đặt:	17
+ Câu 3: Sysinfo.	19
++I.	Phần khai báo:	20
++II.	Phần cài đặt:	22
++III.	Challenge: Compute the load average and export it through sysinfo.	24
  
-+Contents
-+ĐỒ ÁN THỰC HÀNH SỐ 02	2
-+Thông tin chung:	3
-+Mở đầu: Giới thiệu chung.	5
-+Câu 1: GDB	7
-+I.	Cách sử dụng GDB để debug:	8
-+II.	Giải thích cách thức hoạt động và trả lời các câu hỏi:	8
-+III.	Trả lời câu hỏi và giải thích	9
-+Câu 2: Tracing.	14
-+Câu 3: Sysinfo.	19
+ 
+ 
+@@ -213,7 +217,7 @@ Câu 2: Tracing.
+ 
+ 
+ 
+-Phần khai báo:
++    Phần khai báo:
+  Makefile:
+                                         
+   Mục đích: khai báo dùng để biên dịch file trace.c trên make.
+@@ -241,8 +245,7 @@ Phần khai báo:
+  kernel/proc.h
+ 
+   Mục đích: Tạo 1 biến trace_mask trong struct proc để lưu giá trị số nguyên của mask.
+-  
+-  Phần cài đặt:
++    Phần cài đặt:
+  kernel/sysproc.c
+ Mục đích: Lấy giá trị mask trong tầng user và lưu vào trong biến trace_mask của struct proc trong tầng kernel. Hàm trả về 0 nếu thành công.
+ 
+@@ -336,4 +339,24 @@ Kết quả:
+       Cung cấp thông tin về trạng thái hệ thống (bộ nhớ trống và số tiến trình) cho chương trình người dùng.
+  Challenge: Compute the load average and export it through sysinfo.
+  Phần khai báo:
++ Tái cấu trúc lại struct sysinfo: kernel/sysinfo.h
++                                       
++
++ Trong file kernel/proc.c:
++  
++Mục đích: khai báo biến toàn cục dùng để tính và theo dõi load.
++ Phần cài đặt:
++ Trong file kernel/proc.c:
++                                        
++Mục đích: Tính toán load average.
++
++ Trong file kernel/sysproc.c:
++                                       
++Mục đích: Thêm hàm tính toán load average. Trong đó biến loadavg đã được định nghĩa trong kernel/proc.c nên ta sử dụng từ khóa extern cho biến này.
++
++ Trong file kernel/proc.c:
++                                       
++Mục đích: Thêm vào scheduler để theo dỗi các tiến trình, để tính load average.
++Lưu ý: Vì chúng ta vừa làm sau khác đi struct sysinfo nên trong hàm sysinfotest cần điều chỉnh một số thứ.
+ 
++Mục đích: In theo đúng định dạng kiểu uint64.
+diff --git a/Report/22120384_22120398_22120412_Report.pdf b/Report/22120384_22120398_22120412_Report.pdf
+index 56bddde..402024f 100644
+--- a/Report/22120384_22120398_22120412_Report.pdf
++++ b/Report/22120384_22120398_22120412_Report.pdf
+@@ -59,7 +59,11 @@ Câu 1: GDB ....................................................................
+    II. Giải thích cách thức hoạt động và trả lời các câu hỏi:.............................................................. 8
+    III. Trả lời câu hỏi và giải thích ............................................................................................... 9
+ Câu 2: Tracing..................................................................................................................................14
++   II. Phần cài đặt:........................................................................................................................17
+ Câu 3: Sysinfo...................................................................................................................................19
++   I. Phần khai báo:.....................................................................................................................20
++   II. Phần cài đặt:........................................................................................................................22
++   III. Challenge: Compute the load average and export it through sysinfo.........................................24
+ 
+                                                                   4
+ Mở đầu: Giới thiệu chung.
+@@ -213,7 +217,7 @@ chính là tiến trình mà con trỏ p đang trỏ đến.
+ Câu 2: Tracing.
+ 
+                 14
+-Phần khai báo:
++I. Phần khai báo:
+ 
+     1. Makefile:
+ 
+@@ -246,23 +250,23 @@ của các hàm.
+ Ví dụ: như đang thực thi thì kernel sẽ dùng mảng này để ghi tên systemcall ra log.
+ 
+                                                             16
+-6. kernel/proc.h
+-Mục đích: Tạo 1 biến trace_mask trong struct proc để lưu giá trị số nguyên của mask.
++    6. kernel/proc.h
++    Mục đích: Tạo 1 biến trace_mask trong struct proc để lưu giá trị số nguyên của mask.
+ 
+-Phần cài đặt:
++II. Phần cài đặt:
+ 
+-1. kernel/sysproc.c
++    1. kernel/sysproc.c
+ 
+-    Mục đích: Lấy giá trị mask trong tầng user và lưu vào trong biến trace_mask của struct
+-    proc trong tầng kernel. Hàm trả về 0 nếu thành công.
+-2. kernel/proc.c
++         Mục đích: Lấy giá trị mask trong tầng user và lưu vào trong biến trace_mask của struct
++         proc trong tầng kernel. Hàm trả về 0 nếu thành công.
++    2. kernel/proc.c
+ 
+-    Mục đích: Khi 1 tiến trình fork() để tạo ra tiến trình con, tiến trình con đó cũng có nhu
+-    cầu được biết giá trị mask để trace, nên ta sẽ phải sao chép trace_mask của cha vào con
+-    (Vì ta không thể chắc chắn rằng khi trace một process, process đó có gọi fork() để sinh ra
+-    process con hay không, do đó ta phải liệt kê hết).
++         Mục đích: Khi 1 tiến trình fork() để tạo ra tiến trình con, tiến trình con đó cũng có nhu
++         cầu được biết giá trị mask để trace, nên ta sẽ phải sao chép trace_mask của cha vào con
++         (Vì ta không thể chắc chắn rằng khi trace một process, process đó có gọi fork() để sinh ra
++         process con hay không, do đó ta phải liệt kê hết).
+ 
+-                                                            17
++                                                                 17
+ 3. kernel/syscall.c
+ 
+     Mục đích: Hiệu chỉnh hàm syscall để trả ra thông tin trace được, gồm process ID, tên
+@@ -380,5 +384,32 @@ Mục đích:
+     o Cung cấp thông tin về trạng thái hệ thống (bộ nhớ trống và số tiến trình) cho chương
+          trình người dùng.
+ 
++III. Challenge: Compute the load average and export it through sysinfo.
++1. Phần khai báo:
++• Tái cấu trúc lại struct sysinfo: kernel/sysinfo.h
++
+                                                             24
++    • Trong file kernel/proc.c:
++Mục đích: khai báo biến toàn cục dùng để tính và theo dõi load.
++
++    2. Phần cài đặt:
++    • Trong file kernel/proc.c:
++
++Mục đích: Tính toán load average.
++
++                                                                 25
++    • Trong file kernel/sysproc.c:
++
++Mục đích: Thêm hàm tính toán load average. Trong đó biến loadavg đã được định nghĩa trong
++kernel/proc.c nên ta sử dụng từ khóa extern cho biến này.
++
++                                                                 26
++    • Trong file kernel/proc.c:
++
++Mục đích: Thêm vào scheduler để theo dỗi các tiến trình, để tính load average.
++Lưu ý: Vì chúng ta vừa làm sau khác đi struct sysinfo nên trong hàm sysinfotest cần điều chỉnh
++một số thứ.
++Mục đích: In theo đúng định dạng kiểu uint64.
++
++                                                                 27
+ 
+diff --git a/Submission/22120384_22120398_22020412.zip b/Submission/22120384_22120398_22020412.zip
+deleted file mode 100644
+index 0dded6e..0000000
+Binary files a/Submission/22120384_22120398_22020412.zip and /dev/null differ
+diff --git a/Submission/22120384_22120398_22120412.patch b/Submission/22120384_22120398_22120412.patch
+deleted file mode 100644
+index 6a16969..0000000
+--- a/Submission/22120384_22120398_22120412.patch
++++ /dev/null
+@@ -1,44 +0,0 @@
+-diff --git a/Report/22120384_22120398_22120412.docx b/Report/22120384_22120398_22120412.docx
+-index c54c62d..9e0e4f8 100644
+---- a/Report/22120384_22120398_22120412.docx
+-+++ b/Report/22120384_22120398_22120412.docx
+-@@ -32,6 +32,18 @@ Thông tin chung:
+-  22120412  -  Nguyễn Anh Tường.
+-  Link github repository: "Click here to go to our github repository." [HYPERLINK: https://github.com/richardnguyen0715/OS-Proc-Lap02-SystemCall]
+- 
+-+Contents
+-+ĐỒ ÁN THỰC HÀNH SỐ 02	2
+-+Thông tin chung:	3
+-+Mở đầu: Giới thiệu chung.	5
+-+Câu 1: GDB	7
+-+I.	Cách sử dụng GDB để debug:	8
+-+II.	Giải thích cách thức hoạt động và trả lời các câu hỏi:	8
+-+III.	Trả lời câu hỏi và giải thích	9
+-+Câu 2: Tracing.	14
+-+Câu 3: Sysinfo.	19
+-+
+-+
+- 
+- Mở đầu: Giới thiệu chung.
+- 
+-@@ -88,9 +100,9 @@ Tracing
+- 
+- Câu 1: GDB
+- 
+--I/Cách sử dụng GDB để debug:
+-+ Cách sử dụng GDB để debug:
+- Trong terminal, nhập make qemu-gdb. Điều này sẽ chạy QEMU và kích hoạt gỡ lỗi. Ở đây, cổng là 25000. Sau đó mở một terminal khác và chạy gdb-multiarch -x .gdbinit. Thao tác này sẽ chạy các lệnh trong .gdbinit, cho phép gỡ lỗi từ xa và đặt Arch thành riscv64. 
+--II/Giải thích cách thức hoạt động và trả lời các câu hỏi:
+-+ Giải thích cách thức hoạt động và trả lời các câu hỏi:
+- 1/Giải thích một số câu lệnh: 
+- 1. (gdb) b syscall
+- 
+-@@ -130,7 +142,7 @@ Thông báo: Thread 3 hit Breakpoint 1, syscall () at kernel/syscall.c:146
+-  Call stack liệt kê các hàm đang được gọi, từ hàm hiện tại đến các hàm gọi trước đó.
+-  Thông tin này giúp bạn xác định dòng chảy của chương trình dẫn đến điểm dừng.
+-  Mỗi dòng trong backtrace cho biết hàm nào được gọi, các tham số được truyền vào, và dòng mã nơi cuộc gọi xảy ra.
+--III/ Trả lời câu hỏi và giải thích
+-+ Trả lời câu hỏi và giải thích
+- 1. Looking at the backtrace output, which function called syscall?
+- Syscall được gọi bởi usertrap(), được thể hiện trong output của backtrace.
+- 
+diff --git a/Submission/xv6-labs-2024/Makefile b/Submission/xv6-labs-2024/Makefile
+index b3f43b3..77c6652 100644
+--- a/Submission/xv6-labs-2024/Makefile
++++ b/Submission/xv6-labs-2024/Makefile
+@@ -85,7 +85,7 @@ LD = $(TOOLPREFIX)ld
+ OBJCOPY = $(TOOLPREFIX)objcopy
+ OBJDUMP = $(TOOLPREFIX)objdump
+ 
+-CFLAGS = -Wall -Werror -O -fno-omit-frame-pointer -ggdb -gdwarf-2
++CFLAGS = -Wall -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -DKERNEL
+ 
+ ifdef LAB
+ LABUPPER = $(shell echo $(LAB) | tr a-z A-Z)
+diff --git a/Submission/xv6-labs-2024/kernel/proc.c b/Submission/xv6-labs-2024/kernel/proc.c
+index f0f8219..208542c 100644
+--- a/Submission/xv6-labs-2024/kernel/proc.c
++++ b/Submission/xv6-labs-2024/kernel/proc.c
+@@ -17,6 +17,8 @@ struct spinlock pid_lock;
+ 
+ extern void forkret(void);
+ static void freeproc(struct proc *p);
++void update_runnable_procs(void);
++uint64 loadavg = 0;
+ 
+ extern char trampoline[]; // trampoline.S
+ 
+@@ -401,6 +403,7 @@ wait(uint64 addr)
+   acquire(&wait_lock);
+ 
+   for(;;){
++
+     // Scan through table looking for exited children.
+     havekids = 0;
+     for(pp = proc; pp < &proc[NPROC]; pp++){
+@@ -453,6 +456,7 @@ scheduler(void)
+ 
+   c->proc = 0;
+   for(;;){
++    update_runnable_procs();
+     // The most recent process to run may have had interrupts
+     // turned off; enable them to avoid a deadlock if all
+     // processes are waiting.
+@@ -708,4 +712,19 @@ nproc(void){
+     }
+   }
+   return procCount;
+-}
+\ No newline at end of file
++}
++
++uint64 runnable_procs = 0;
 +
 +
++void update_runnable_procs(void) {
++    struct proc *p;
++    uint count = 0;
++
++    for (p = proc; p < &proc[NPROC]; p++) {
++        if (p->state == RUNNABLE)
++            count++;
++    }
++    runnable_procs = count;
++    loadavg = (loadavg * 5 + runnable_procs * 10) / 10;
++}
+diff --git a/Submission/xv6-labs-2024/kernel/sysinfo.h b/Submission/xv6-labs-2024/kernel/sysinfo.h
+index d4de5e4..7522b59 100644
+--- a/Submission/xv6-labs-2024/kernel/sysinfo.h
++++ b/Submission/xv6-labs-2024/kernel/sysinfo.h
+@@ -1,4 +1,18 @@
++#ifndef SYSINFO_H
++#define SYSINFO_H
++
++#ifdef KERNEL
++// Kernel-specific includes and definitions
++#include "types.h"
++#else
++// User-space definitions
++typedef unsigned long long uint64;
++#endif
++
+ struct sysinfo {
+-  uint64 freemem;   // amount of free memory (bytes)
+-  uint64 nproc;     // number of process
++    uint64 freemem;  // Free memory in bytes
++    uint64 nproc;    // Number of active processes
++    uint64 loadavg;  // Load average (optional)
+ };
++
++#endif // SYSINFO_H
+diff --git a/Submission/xv6-labs-2024/kernel/sysproc.c b/Submission/xv6-labs-2024/kernel/sysproc.c
+index a674c84..6b76a57 100644
+--- a/Submission/xv6-labs-2024/kernel/sysproc.c
++++ b/Submission/xv6-labs-2024/kernel/sysproc.c
+@@ -108,6 +108,8 @@ sys_trace(void)
+   return 0; // Trả về thành công
+ }
  
- Mở đầu: Giới thiệu chung.
++extern uint64 loadavg;
++
+ uint64
+ sys_sysinfo(void)
+ {
+@@ -117,6 +119,7 @@ sys_sysinfo(void)
+   argaddr(0, &addr);
+   info.freemem = nfree();
+   info.nproc = nproc();
++  info.loadavg = loadavg;
  
-@@ -88,9 +100,9 @@ Tracing
+   if(copyout(p->pagetable, addr, (char*)&info, sizeof(info)) < 0)
+     return -1;
+diff --git a/Submission/xv6-labs-2024/user/sysinfotest.c b/Submission/xv6-labs-2024/user/sysinfotest.c
+index 8577467..49ce646 100644
+--- a/Submission/xv6-labs-2024/user/sysinfotest.c
++++ b/Submission/xv6-labs-2024/user/sysinfotest.c
+@@ -107,7 +107,7 @@ void testproc() {
+   if(pid == 0){
+     sinfo(&info);
+     if(info.nproc != nproc+1) {
+-      printf("sysinfotest: FAIL nproc is %ld instead of %ld\n", info.nproc, nproc+1);
++      printf("sysinfotest: FAIL nproc is %llu instead of %llu\n", info.nproc, (uint64)(nproc + 1));
+       exit(1);
+     }
+     exit(0);
+@@ -115,7 +115,7 @@ void testproc() {
+   wait(&status);
+   sinfo(&info);
+   if(info.nproc != nproc) {
+-      printf("sysinfotest: FAIL nproc is %ld instead of %ld\n", info.nproc, nproc);
++      printf("sysinfotest: FAIL nproc is %llu instead of %llu\n", info.nproc, (uint64)nproc);
+       exit(1);
+   }
+ }
+diff --git a/Submission/xv6-labs-2024/user/user.h b/Submission/xv6-labs-2024/user/user.h
+index ba344dc..d0f98fe 100644
+--- a/Submission/xv6-labs-2024/user/user.h
++++ b/Submission/xv6-labs-2024/user/user.h
+@@ -1,4 +1,5 @@
+ struct stat;
++#include "kernel/sysinfo.h"
  
- Câu 1: GDB
- 
--I/Cách sử dụng GDB để debug:
-+ Cách sử dụng GDB để debug:
- Trong terminal, nhập make qemu-gdb. Điều này sẽ chạy QEMU và kích hoạt gỡ lỗi. Ở đây, cổng là 25000. Sau đó mở một terminal khác và chạy gdb-multiarch -x .gdbinit. Thao tác này sẽ chạy các lệnh trong .gdbinit, cho phép gỡ lỗi từ xa và đặt Arch thành riscv64. 
--II/Giải thích cách thức hoạt động và trả lời các câu hỏi:
-+ Giải thích cách thức hoạt động và trả lời các câu hỏi:
- 1/Giải thích một số câu lệnh: 
- 1. (gdb) b syscall
- 
-@@ -130,7 +142,7 @@ Thông báo: Thread 3 hit Breakpoint 1, syscall () at kernel/syscall.c:146
-  Call stack liệt kê các hàm đang được gọi, từ hàm hiện tại đến các hàm gọi trước đó.
-  Thông tin này giúp bạn xác định dòng chảy của chương trình dẫn đến điểm dừng.
-  Mỗi dòng trong backtrace cho biết hàm nào được gọi, các tham số được truyền vào, và dòng mã nơi cuộc gọi xảy ra.
--III/ Trả lời câu hỏi và giải thích
-+ Trả lời câu hỏi và giải thích
- 1. Looking at the backtrace output, which function called syscall?
- Syscall được gọi bởi usertrap(), được thể hiện trong output của backtrace.
- 
+ // system calls
+ int fork(void);

@@ -107,7 +107,7 @@ void testproc() {
   if(pid == 0){
     sinfo(&info);
     if(info.nproc != nproc+1) {
-      printf("sysinfotest: FAIL nproc is %ld instead of %ld\n", info.nproc, nproc+1);
+      printf("sysinfotest: FAIL nproc is %llu instead of %llu\n", info.nproc, (uint64)(nproc + 1));
       exit(1);
     }
     exit(0);
@@ -115,7 +115,7 @@ void testproc() {
   wait(&status);
   sinfo(&info);
   if(info.nproc != nproc) {
-      printf("sysinfotest: FAIL nproc is %ld instead of %ld\n", info.nproc, nproc);
+      printf("sysinfotest: FAIL nproc is %llu instead of %llu\n", info.nproc, (uint64)nproc);
       exit(1);
   }
 }
