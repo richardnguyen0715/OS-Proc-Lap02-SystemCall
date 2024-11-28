@@ -108,6 +108,8 @@ sys_trace(void)
   return 0; // Trả về thành công
 }
 
+extern uint64 loadavg;
+
 uint64
 sys_sysinfo(void)
 {
@@ -117,6 +119,7 @@ sys_sysinfo(void)
   argaddr(0, &addr);
   info.freemem = nfree();
   info.nproc = nproc();
+  info.loadavg = loadavg;
 
   if(copyout(p->pagetable, addr, (char*)&info, sizeof(info)) < 0)
     return -1;
