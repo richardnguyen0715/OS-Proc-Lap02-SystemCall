@@ -1,0 +1,44 @@
+diff --git a/Report/22120384_22120398_22120412.docx b/Report/22120384_22120398_22120412.docx
+index c54c62d..9e0e4f8 100644
+--- a/Report/22120384_22120398_22120412.docx
++++ b/Report/22120384_22120398_22120412.docx
+@@ -32,6 +32,18 @@ Thông tin chung:
+  22120412  -  Nguyễn Anh Tường.
+  Link github repository: "Click here to go to our github repository." [HYPERLINK: https://github.com/richardnguyen0715/OS-Proc-Lap02-SystemCall]
+ 
++Contents
++ĐỒ ÁN THỰC HÀNH SỐ 02	2
++Thông tin chung:	3
++Mở đầu: Giới thiệu chung.	5
++Câu 1: GDB	7
++I.	Cách sử dụng GDB để debug:	8
++II.	Giải thích cách thức hoạt động và trả lời các câu hỏi:	8
++III.	Trả lời câu hỏi và giải thích	9
++Câu 2: Tracing.	14
++Câu 3: Sysinfo.	19
++
++
+ 
+ Mở đầu: Giới thiệu chung.
+ 
+@@ -88,9 +100,9 @@ Tracing
+ 
+ Câu 1: GDB
+ 
+-I/Cách sử dụng GDB để debug:
++ Cách sử dụng GDB để debug:
+ Trong terminal, nhập make qemu-gdb. Điều này sẽ chạy QEMU và kích hoạt gỡ lỗi. Ở đây, cổng là 25000. Sau đó mở một terminal khác và chạy gdb-multiarch -x .gdbinit. Thao tác này sẽ chạy các lệnh trong .gdbinit, cho phép gỡ lỗi từ xa và đặt Arch thành riscv64. 
+-II/Giải thích cách thức hoạt động và trả lời các câu hỏi:
++ Giải thích cách thức hoạt động và trả lời các câu hỏi:
+ 1/Giải thích một số câu lệnh: 
+ 1. (gdb) b syscall
+ 
+@@ -130,7 +142,7 @@ Thông báo: Thread 3 hit Breakpoint 1, syscall () at kernel/syscall.c:146
+  Call stack liệt kê các hàm đang được gọi, từ hàm hiện tại đến các hàm gọi trước đó.
+  Thông tin này giúp bạn xác định dòng chảy của chương trình dẫn đến điểm dừng.
+  Mỗi dòng trong backtrace cho biết hàm nào được gọi, các tham số được truyền vào, và dòng mã nơi cuộc gọi xảy ra.
+-III/ Trả lời câu hỏi và giải thích
++ Trả lời câu hỏi và giải thích
+ 1. Looking at the backtrace output, which function called syscall?
+ Syscall được gọi bởi usertrap(), được thể hiện trong output của backtrace.
+ 
