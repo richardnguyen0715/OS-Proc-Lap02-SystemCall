@@ -11,6 +11,6 @@ chế độ người dùng user mode.
 5. Why does the kernel crash? 
 Một lỗi đã xảy ra trong khi tải dữ liệu từ địa chỉ bộ nhớ 0 vào thanh ghi s2, nhưng trong sách giáo trình, địa chỉ 0 không ánh xạ vào không gian kernel, thay vào đó, nó bắt đầu tại địa chỉ ảo 0x80000000
 6. What is the name of the binary that was running when the kernel paniced? What is its process id (pid)?
-- Tên của tệp nhị phân: "initcode\000\000\000\000\000\000\000"
+- Tên của tệp nhị phân: initcode
 - pid = 1
 //PHẦN GIẢI THÍCH CHI TIẾT CHO TỪNG CÂU HỎI ĐƯỢC THỰC HIỆN TRONG FILE BÁO CÁO
